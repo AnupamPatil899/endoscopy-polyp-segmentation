@@ -1,0 +1,4 @@
+# Git LFS tracking for model weights and large binary checkpoints
+*.pth filter=lfs diff=lfs merge=lfs -text
+*.pt filter=lfs diff=lfs merge=lfs -text
+outputs/checkpoints/*.pth filter=lfs diff=lfs merge=lfs -text

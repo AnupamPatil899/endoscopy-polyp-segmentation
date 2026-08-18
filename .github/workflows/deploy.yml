@@ -1,0 +1,113 @@
+name: CI/CD Pipeline - Polyp Segmentation Cloud Run Deployment
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - deployment
+      - Deployment
+  pull_request:
+    branches:
+      - main
+      - master
+      - deployment
+      - Deployment
+
+env:
+  GCP_REGION: us-central1
+  SERVICE_NAME: polyp-segmentation-app
+  REPOSITORY_NAME: polyp-segmentation
+
+jobs:
+  # ─── CI JOB: CODE VALIDATION & SYNTAX CHECKS ────────────────────────────
+  ci-test:
+    name: CI - Syntax & Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+          pip install -r requirements.txt
+
+      - name: Python Syntax Verification
+        run: |
+          python -m py_compile src/*.py app/*.py
+
+      - name: Run Model & Loss Suite Unit Tests
+        run: |
+          python src/test_model_and_loss.py
+
+  # ─── CD JOB: BUILD & DEPLOY TO GOOGLE CLOUD RUN ─────────────────────────
+  cd-deploy:
+    name: CD - Deploy to GCP Cloud Run
+    needs: ci-test
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/Deployment' || github.ref == 'refs/heads/deployment')
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker for Artifact Registry
+        run: |
+          gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev --quiet
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build & Push Docker Image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ${{ env.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY_NAME }}/${{ env.SERVICE_NAME }}:${{ github.sha }}
+            ${{ env.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY_NAME }}/${{ env.SERVICE_NAME }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Deploy to Google Cloud Run
+        run: |
+          gcloud run deploy ${{ env.SERVICE_NAME }} \
+            --image ${{ env.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY_NAME }}/${{ env.SERVICE_NAME }}:latest \
+            --region ${{ env.GCP_REGION }} \
+            --platform managed \
+            --memory 2Gi \
+            --cpu 2 \
+            --port 8080 \
+            --allow-unauthenticated \
+            --set-env-vars PYTHONUNBUFFERED=1
+
+      - name: Output Service URL
+        run: |
+          SERVICE_URL=$(gcloud run services describe ${{ env.SERVICE_NAME }} --region ${{ env.GCP_REGION }} --format 'value(status.url)')
+          echo "🚀 Deployed Successfully! Live URL: $SERVICE_URL"

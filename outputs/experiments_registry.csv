@@ -1,0 +1,3 @@
+run_id,timestamp,device,epochs,batch_size,img_size,encoder_lr,decoder_lr,dice_weight,bce_weight,best_epoch,best_val_dice,best_val_iou,total_train_time_min,is_dry_run
+cpu_dry_run,2026-08-18 02:56:22,cpu,2,16,352,0.0001,0.0005,1.0,1.0,2,0.3175,0.2092,3.21,True
+baseline_kvasir_unet_resnet34,2026-08-18 05:26:33,cuda,40,16,352,0.0001,0.0005,1.0,1.0,38,0.905,0.848,8.87,False

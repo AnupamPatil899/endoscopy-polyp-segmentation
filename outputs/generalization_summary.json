@@ -1,0 +1,60 @@
+{
+  "metrics_summary": {
+    "mean_dice": {
+      "in_dist_kvasir": 0.905,
+      "ood_cvc_clinicdb": 0.8559,
+      "delta": -0.0491,
+      "pct_change": -5.43
+    },
+    "median_dice": {
+      "in_dist_kvasir": 0.9569,
+      "ood_cvc_clinicdb": 0.9263,
+      "delta": -0.0306,
+      "pct_change": -3.2
+    },
+    "worst_decile_dice_p10": {
+      "in_dist_kvasir": 0.7688,
+      "ood_cvc_clinicdb": 0.6641,
+      "delta": -0.1047,
+      "pct_change": -13.62
+    },
+    "mean_iou": {
+      "in_dist_kvasir": 0.848,
+      "ood_cvc_clinicdb": 0.7816,
+      "delta": -0.0664,
+      "pct_change": -7.84
+    },
+    "polyp_sensitivity": {
+      "in_dist_kvasir": 0.8793,
+      "ood_cvc_clinicdb": 0.8843,
+      "delta": 0.005,
+      "pct_change": 0.57
+    }
+  },
+  "size_stratified_deltas": {
+    "Small": {
+      "in_dist_dice": 0.8646,
+      "ood_dice": 0.8308,
+      "dice_delta": -0.0338,
+      "in_dist_sens": 0.9302,
+      "ood_sens": 0.9,
+      "sens_delta": -0.0302
+    },
+    "Medium": {
+      "in_dist_dice": 0.9244,
+      "ood_dice": 0.8801,
+      "dice_delta": -0.0443,
+      "in_dist_sens": 0.925,
+      "ood_sens": 0.9024,
+      "sens_delta": -0.0226
+    },
+    "Large": {
+      "in_dist_dice": 0.8963,
+      "ood_dice": 0.8229,
+      "dice_delta": -0.0734,
+      "in_dist_sens": 0.7681,
+      "ood_sens": 0.75,
+      "sens_delta": -0.0181
+    }
+  }
+}
