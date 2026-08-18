@@ -1,0 +1,12 @@
+services:
+  polyp-segmentation-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: endoseg-clinical-app
+    ports:
+      - "8501:8080"
+    environment:
+      - PORT=8080
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped

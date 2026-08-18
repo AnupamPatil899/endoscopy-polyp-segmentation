@@ -1,0 +1,152 @@
+{
+  "timestamp": "2026-08-18 05:36:18",
+  "total_samples": 200,
+  "threshold": 0.5,
+  "tier1_pixel_metrics": {
+    "mean_dice": 0.9050239767506718,
+    "median_dice": 0.9569041728973389,
+    "worst_decile_dice_p10": 0.7688469648361206,
+    "mean_iou": 0.8480390959605575,
+    "median_iou": 0.9173693954944611,
+    "worst_decile_iou_p10": 0.62451651096344,
+    "mean_precision": 0.9240366565818732,
+    "mean_recall": 0.9167108987972261
+  },
+  "tier2_polyp_detection": {
+    "total_ground_truth_polyps": 232,
+    "total_detected_polyps": 204,
+    "polyp_detection_sensitivity": 0.8793103448275862
+  },
+  "tier3_calibration": {
+    "brier_score": 0.020902,
+    "expected_calibration_error_ece": 0.015662,
+    "reliability_bins": [
+      {
+        "bin_index": 0,
+        "bin_range": [
+          0.0,
+          0.1
+        ],
+        "confidence": 0.0019,
+        "accuracy": 0.0121,
+        "pixel_count": 1309148
+      },
+      {
+        "bin_index": 1,
+        "bin_range": [
+          0.1,
+          0.2
+        ],
+        "confidence": 0.1431,
+        "accuracy": 0.3273,
+        "pixel_count": 8944
+      },
+      {
+        "bin_index": 2,
+        "bin_range": [
+          0.2,
+          0.3
+        ],
+        "confidence": 0.2475,
+        "accuracy": 0.3874,
+        "pixel_count": 4904
+      },
+      {
+        "bin_index": 3,
+        "bin_range": [
+          0.3,
+          0.4
+        ],
+        "confidence": 0.3468,
+        "accuracy": 0.479,
+        "pixel_count": 3829
+      },
+      {
+        "bin_index": 4,
+        "bin_range": [
+          0.4,
+          0.5
+        ],
+        "confidence": 0.4495,
+        "accuracy": 0.4822,
+        "pixel_count": 2999
+      },
+      {
+        "bin_index": 5,
+        "bin_range": [
+          0.5,
+          0.6
+        ],
+        "confidence": 0.5503,
+        "accuracy": 0.5193,
+        "pixel_count": 2908
+      },
+      {
+        "bin_index": 6,
+        "bin_range": [
+          0.6,
+          0.7
+        ],
+        "confidence": 0.6522,
+        "accuracy": 0.5697,
+        "pixel_count": 3435
+      },
+      {
+        "bin_index": 7,
+        "bin_range": [
+          0.7,
+          0.8
+        ],
+        "confidence": 0.7532,
+        "accuracy": 0.6509,
+        "pixel_count": 4832
+      },
+      {
+        "bin_index": 8,
+        "bin_range": [
+          0.8,
+          0.9
+        ],
+        "confidence": 0.8567,
+        "accuracy": 0.6916,
+        "pixel_count": 8907
+      },
+      {
+        "bin_index": 9,
+        "bin_range": [
+          0.9,
+          1.0
+        ],
+        "confidence": 0.9912,
+        "accuracy": 0.9627,
+        "pixel_count": 198894
+      }
+    ]
+  },
+  "stratified_by_size": {
+    "Large": {
+      "num_samples": 53,
+      "mean_dice": 0.8963193409847763,
+      "median_dice": 0.9653323888778687,
+      "worst_decile_dice_p10": 0.7547001838684082,
+      "mean_iou": 0.8404505979621185,
+      "polyp_sensitivity": 0.7681159420289855
+    },
+    "Medium": {
+      "num_samples": 107,
+      "mean_dice": 0.9244427499927093,
+      "median_dice": 0.9618145823478699,
+      "worst_decile_dice_p10": 0.8126672506332397,
+      "mean_iou": 0.8725784429322894,
+      "polyp_sensitivity": 0.925
+    },
+    "Small": {
+      "num_samples": 40,
+      "mean_dice": 0.8646124007180334,
+      "median_dice": 0.9312064051628113,
+      "worst_decile_dice_p10": 0.657568347454071,
+      "mean_iou": 0.7924511026591062,
+      "polyp_sensitivity": 0.9302325581395349
+    }
+  }
+}
