@@ -16,8 +16,8 @@ on:
 
 env:
   GCP_REGION: us-central1
-  SERVICE_NAME: polyp-segmentation-app
-  REPOSITORY_NAME: polyp-segmentation
+  SERVICE_NAME: endoscopy-polyp-segmentation
+  REPOSITORY_NAME: endoscopy-polyp-segmentation
 
 jobs:
   # ─── CI JOB: CODE VALIDATION & SYNTAX CHECKS ────────────────────────────
@@ -77,6 +77,14 @@ jobs:
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
+
+      - name: Ensure Artifact Registry Repository Exists
+        run: |
+          gcloud artifacts repositories create ${{ env.REPOSITORY_NAME }} \
+            --repository-format=docker \
+            --location=${{ env.GCP_REGION }} \
+            --description="Docker repository for endoscopy polyp segmentation" \
+            --quiet 2>/dev/null || true
 
       - name: Login to Artifact Registry
         uses: docker/login-action@v3
