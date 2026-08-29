@@ -1,0 +1,32 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Git & IDE
+.git/
+.gitignore
+.github/
+.vscode/
+.idea/
+
+# Large raw archive files
+Data/*.zip
+Data/*.tar.gz
+
+# Scratch & development logs
+*.log
+scratch/
+notebooks/
+Docs/
+outputs/augmentation_samples/

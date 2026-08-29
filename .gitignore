@@ -49,3 +49,7 @@ outputs/augmentation_samples/
 # Internal Agent Notes / Prompts / Raw Briefs
 Docs/
 Study_docs/
+
+# Build scripts / local generators
+src/build_notebook.py
+
