@@ -189,22 +189,28 @@ endoscopy-polyp-segmentation/
 
 ```
 ┌──────────────────────────────────────────────────────────┐     ┌──────────────────────────────────────────────────────────┐
-│                   V1 (Current Release)                   │     │                 V2 (Upcoming Release)                    │
-│             Static Clinical Diagnostics & OOD            │     │         Real-Time Video Stream & Edge Pipeline           │
+│                   V1 (Current Baseline)                  │     │                 V2 (Upcoming Release)                    │
+│             Static Clinical Diagnostics & OOD            │     │       Dual-Track: Transformers & Edge Video Stream       │
 ├──────────────────────────────────────────────────────────┤     ├──────────────────────────────────────────────────────────┤
-│ • High-resolution static endoscopy frame analysis        │     │ • Full-motion colonoscopy video (MP4 / RTSP / WebRTC)    │
-│ • ResNet34 U-Net with ImageNet pretrained encoder        │     │ • Temporal memory / optical flow temporal consistency    │
-│ • Multi-tier benchmark & tail-drop failure taxonomy      │     │ • TensorRT / ONNX Runtime FP16 compilation (<15ms)       │
-│ • Connected-component discrete lesion metrics            │     │ • 60 FPS lightweight tracker + periodic keyframe segment │
-│ • Serverless deployment on Google Cloud Run              │     │ • Edge deployment on NVIDIA Jetson AGX in operating room│
+│ • High-resolution static endoscopy frame analysis        │     │ Track 1: SegFormer Vision Transformer & Attention U-Net  │
+│ • ResNet34 U-Net with ImageNet pretrained encoder        │     │ Track 2: TensorRT / ONNX FP16 60 FPS Video Streaming     │
+│ • Multi-tier benchmark & tail-drop failure taxonomy      │     │ • Temporal memory / optical flow temporal consistency    │
+│ • Connected-component discrete lesion metrics            │     │ • Edge deployment on NVIDIA Jetson AGX in operating room │
+│ • Serverless deployment on Google Cloud Run              │     │ • Multimodal VLM LLMOps for automated clinical reporting │
 └──────────────────────────────────────────────────────────┘     └──────────────────────────────────────────────────────────┘
 ```
 
-### How V2 Video Stream Processing is Architected:
-1. **Temporal Coherence & Flicker Suppression:** Single-frame models applied to video produce high-frequency boundary jitter. V2 introduces a spatio-temporal memory block (or optical flow feature warping) between frame $t-1$ and frame $t$ to maintain smooth, continuous lesion tracking.
-2. **Sub-15ms Ultra-Low Latency:** Model compilation into **TensorRT with FP16 precision** reduces inference latency from ~12.5ms to **~3.5ms on GPU** (or ~30ms via OpenVINO on CPU), enabling native 60 FPS real-time live feeds.
-3. **Decoupled Asynchronous Producer-Consumer Pipeline:** A video worker ingests the camera feed into a lock-free queue while a lightweight Kalman/ByteTrack tracker tracks bounding boxes at 60 FPS, invoking the full segmentation network on keyframes to conserve compute.
-4. **Operating Room Edge Deployment:** Deployable directly on edge devices (such as NVIDIA Jetson AGX / IGX Orin) connected to colonoscope video feeds via SDI/HDMI capture cards.
+### 🧪 Track 1: Algorithmic & Transformer Upgrades (Model Level)
+1. **SegFormer Vision Transformer Backbone**: Replaces CNN fixed local receptive fields with hierarchical global self-attention (MiT encoder) to improve small polyp recognition ($<5\%$ area) and low-contrast mucosal boundary detection.
+2. **Attention U-Net Skip Gates**: Integrates channel and spatial attention gates (scSE) onto U-Net skip connections so the decoder dynamically weights relevant encoder features while suppressing noisy background tissue signals.
+3. **Evidence-Driven Loss Tuning**: Uses empirical findings from the failure analysis notebook to adjust Focal-Dice loss weighting for hard-decile cases ($P10$ worst decile).
+
+### ⚡ Track 2: Systems & Real-Time Edge Processing (Engine & Deployment Level)
+1. **Model Agnostic Integration**: Track 2 infrastructure (ONNX Runtime / TensorRT compilation, video buffering) is fully decoupled from model architecture, accepting both CNN (ResNet34) and Transformer (SegFormer) backbones seamlessly.
+2. **Sub-15ms Ultra-Low Latency**: Model compilation into **TensorRT FP16 / ONNX Runtime** reduces inference latency from ~12.5ms to **~3.5ms on GPU**, enabling native 60 FPS real-time live feeds in endoscopic operating rooms.
+3. **Temporal Coherence & Flicker Suppression**: Spatio-temporal memory blocks and optical-flow feature warping between consecutive frames eliminate high-frequency boundary jitter in live video streams.
+4. **Multimodal VLM & LLMOps Vision (Future V3)**: Extension to pair vision segmentation heads with a Medical Vision-Language Model (VLM) via an async LLMOps pipeline for generating automated, structured clinical colonoscopy diagnostic reports.
+
 
 ---
 
